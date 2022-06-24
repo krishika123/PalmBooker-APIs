@@ -70,4 +70,7 @@
     <Build Include="dbo\Tables\Payment.sql" />
     <Build Include="Security\PALM_BOOKING_APP.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="KrishBooking.SSDT.refactorlog" />
+  </ItemGroup>
 </Project>

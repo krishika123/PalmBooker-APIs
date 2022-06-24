@@ -27,6 +27,31 @@ namespace KrishBookingAPI.Controllers
             try
             {
                 var response = await _dbContext.Bookings
+                    .Where(c => c.StatusAoD != "DEL")
+                    .Include(c=>c.User)
+                    .Include(c=>c.Facility)
+                    .ToListAsync();
+                if (response != null)
+                {
+                    var bookings = _mapper.Map<List<BookingDetailsDto>>(response);
+                    return Ok(bookings);
+                }
+                return NoContent();
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+        [HttpGet("GetDeleted")]       
+        public  async Task<IActionResult> GetDeleted()
+        {
+            try
+            {
+                var response = await _dbContext.Bookings
+                    .Where(c => c.StatusAoD == "DEL")
                     .Include(c=>c.User)
                     .Include(c=>c.Facility)
                     .ToListAsync();
@@ -49,7 +74,9 @@ namespace KrishBookingAPI.Controllers
         {
             try
             {
-                var response = await _dbContext.Bookings.Where(c=>c.Id==id).ToListAsync();
+                var response = await _dbContext.Bookings
+                    .Where(c=>c.Id==id && c.StatusAoD != "DEL")
+                    .ToListAsync();
                 return Ok(response);
 
             }
@@ -121,25 +148,39 @@ namespace KrishBookingAPI.Controllers
             try
             {
              
-                var bookingDelete = await _dbContext.Bookings.FindAsync(id);
-
-                if (bookingDelete == null)
-                    return NotFound();
-
-                _dbContext.Bookings.Remove(bookingDelete);
-
-                var response = await _dbContext.SaveChangesAsync();
-                return Ok();
-
-            }
-            catch (Exception)
-            {
+                var bookingDelete = await _dbContext.Bookings
+                    .Include(c=>c.Payments)
+                    .Where(c => c.Id == id)
+                    .ToListAsync();
                 
 
-                if (!BookingExists(id))
-                 return NotFound();
+                if (bookingDelete != null)
+                {
+
+                    //Hard Delete
+                    //_dbContext.Bookings.RemoveRange(bookingDelete);
+
+
+                    //Soft Delete
+                    foreach (var item in bookingDelete)
+                    {
+                        item.StatusAoD = "DEL";
+                    }
+                    _dbContext.Bookings.UpdateRange(bookingDelete);
+                    //
+
+                    var response = await _dbContext.SaveChangesAsync();
+                    return Ok();
+                }
+                return NotFound();
+
+               
+
             }
-            return NoContent();
+            catch (Exception e)
+            {
+                throw e;                
+            }
         }
 
 

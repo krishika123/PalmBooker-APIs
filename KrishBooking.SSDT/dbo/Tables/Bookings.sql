@@ -4,7 +4,7 @@
     [FacilityID]     UNIQUEIDENTIFIER NULL,
     [EventDate]      VARCHAR (255) NULL,
     [EventTime]      VARCHAR (255) NULL,
-    [StatusAoD]      VARCHAR (255) NULL,
+    [StatusAoD]      VARCHAR (255) NULL ,
     [AdditionalInfo] VARCHAR (255) NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC), 
     CONSTRAINT [FK_Bookings_To_Users] FOREIGN KEY ([UserID]) REFERENCES [Users]([ID]),
