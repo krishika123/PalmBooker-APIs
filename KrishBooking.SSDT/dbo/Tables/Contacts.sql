@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Contacts] (
-    [ID]              VARCHAR (255) NOT NULL,
-    [UserID]          VARCHAR (255) NULL,
+    [ID]              UNIQUEIDENTIFIER NOT NULL DEFAULT newid(),
+    [UserID]          UNIQUEIDENTIFIER NULL,
     [ReasonOfContact] VARCHAR (255) NULL,
     [Message]         VARCHAR (255) NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC), 

@@ -10,14 +10,12 @@ namespace KrishBookingAPI.Entities
             Bookings = new HashSet<Booking>();
         }
 
-        public string Id { get; set; } = null!;
-        public string? Name { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; } = null!;
         public string? Number { get; set; }
         public string? Description { get; set; }
-        public string? BookingId { get; set; }
-        public string? RatePerHour { get; set; }
+        public string RatePerHour { get; set; } = null!;
 
-        public virtual Booking? Booking { get; set; }
         public virtual ICollection<Booking> Bookings { get; set; }
     }
 }

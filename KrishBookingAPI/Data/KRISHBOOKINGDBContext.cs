@@ -37,9 +37,8 @@ namespace KrishBookingAPI.Data
             modelBuilder.Entity<Booking>(entity =>
             {
                 entity.Property(e => e.Id)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
+                    .HasColumnName("ID")
+                    .HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.AdditionalInfo)
                     .HasMaxLength(255)
@@ -53,34 +52,18 @@ namespace KrishBookingAPI.Data
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.FacilityId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("FacilityID");
-
-                entity.Property(e => e.PaymentId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("PaymentID");
+                entity.Property(e => e.FacilityId).HasColumnName("FacilityID");
 
                 entity.Property(e => e.StatusAoD)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("UserID");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.Facility)
                     .WithMany(p => p.Bookings)
                     .HasForeignKey(d => d.FacilityId)
                     .HasConstraintName("FK_Bookings_To_Facility");
-
-                entity.HasOne(d => d.Payment)
-                    .WithMany(p => p.Bookings)
-                    .HasForeignKey(d => d.PaymentId)
-                    .HasConstraintName("FK_Bookings_To_Payment");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Bookings)
@@ -91,9 +74,8 @@ namespace KrishBookingAPI.Data
             modelBuilder.Entity<Contact>(entity =>
             {
                 entity.Property(e => e.Id)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
+                    .HasColumnName("ID")
+                    .HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Message)
                     .HasMaxLength(255)
@@ -103,10 +85,7 @@ namespace KrishBookingAPI.Data
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("UserID");
+                entity.Property(e => e.UserId).HasColumnName("UserID");
 
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Contacts)
@@ -119,14 +98,8 @@ namespace KrishBookingAPI.Data
                 entity.ToTable("Facility");
 
                 entity.Property(e => e.Id)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.BookingId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("BookingID");
+                    .HasColumnName("ID")
+                    .HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Description)
                     .HasMaxLength(255)
@@ -143,11 +116,6 @@ namespace KrishBookingAPI.Data
                 entity.Property(e => e.RatePerHour)
                     .HasMaxLength(255)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Booking)
-                    .WithMany(p => p.Facilities)
-                    .HasForeignKey(d => d.BookingId)
-                    .HasConstraintName("FK_Facility_To_Bookings");
             });
 
             modelBuilder.Entity<Payment>(entity =>
@@ -155,18 +123,14 @@ namespace KrishBookingAPI.Data
                 entity.ToTable("Payment");
 
                 entity.Property(e => e.Id)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
+                    .HasColumnName("ID")
+                    .HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Amount)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.BookingId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("BookingID");
+                entity.Property(e => e.BookingId).HasColumnName("BookingID");
 
                 entity.Property(e => e.DueDate)
                     .HasMaxLength(255)
@@ -180,33 +144,17 @@ namespace KrishBookingAPI.Data
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.UserId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("UserID");
-
                 entity.HasOne(d => d.Booking)
                     .WithMany(p => p.Payments)
                     .HasForeignKey(d => d.BookingId)
                     .HasConstraintName("FK_Payment_To_Bookings");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Payments)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Payment_To_Users");
             });
 
             modelBuilder.Entity<User>(entity =>
             {
                 entity.Property(e => e.Id)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("ID");
-
-                entity.Property(e => e.BookingId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("BookingID");
+                    .HasColumnName("ID")
+                    .HasDefaultValueSql("(newid())");
 
                 entity.Property(e => e.Email)
                     .HasMaxLength(255)
@@ -216,27 +164,17 @@ namespace KrishBookingAPI.Data
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PaymentId)
-                    .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("PaymentID");
-
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(255)
                     .IsUnicode(false);
-
-                entity.HasOne(d => d.Booking)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.BookingId)
-                    .HasConstraintName("FK_Users_To_Bookings");
-
-                entity.HasOne(d => d.Payment)
-                    .WithMany(p => p.Users)
-                    .HasForeignKey(d => d.PaymentId)
-                    .HasConstraintName("FK_Users_To_Payment");
             });
 
             OnModelCreatingPartial(modelBuilder);
+        }
+
+        internal Task FindAsync(Guid id)
+        {
+            throw new NotImplementedException();
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
