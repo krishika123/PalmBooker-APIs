@@ -172,11 +172,6 @@ namespace KrishBookingAPI.Data
             OnModelCreatingPartial(modelBuilder);
         }
 
-        internal Task FindAsync(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

@@ -21,15 +21,15 @@ namespace KrishBookingAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]       
-        public  async Task<IActionResult> Get()
+        [HttpGet("GetBookings")]
+        public async Task<IActionResult> Get()
         {
             try
             {
                 var response = await _dbContext.Bookings
                     .Where(c => c.StatusAoD != "DEL")
-                    .Include(c=>c.User)
-                    .Include(c=>c.Facility)
+                    .Include(c => c.User)
+                    .Include(c => c.Facility)
                     .ToListAsync();
                 if (response != null)
                 {
@@ -45,15 +45,15 @@ namespace KrishBookingAPI.Controllers
                 throw e;
             }
         }
-        [HttpGet("GetDeleted")]       
-        public  async Task<IActionResult> GetDeleted()
+        [HttpGet("GetDeletedBookings")]
+        public async Task<IActionResult> GetDeleted()
         {
             try
             {
                 var response = await _dbContext.Bookings
                     .Where(c => c.StatusAoD == "DEL")
-                    .Include(c=>c.User)
-                    .Include(c=>c.Facility)
+                    .Include(c => c.User)
+                    .Include(c => c.Facility)
                     .ToListAsync();
                 if (response != null)
                 {
@@ -69,13 +69,13 @@ namespace KrishBookingAPI.Controllers
                 throw e;
             }
         }
-        [HttpGet("{id}")]       
-        public  async Task<IActionResult> Get(Guid id)
+        [HttpGet("GetBookingBy{id}")]
+        public async Task<IActionResult> Get(Guid id)
         {
             try
             {
                 var response = await _dbContext.Bookings
-                    .Where(c=>c.Id==id && c.StatusAoD != "DEL")
+                    .Where(c => c.Id == id && c.StatusAoD != "DEL")
                     .ToListAsync();
                 return Ok(response);
 
@@ -87,17 +87,17 @@ namespace KrishBookingAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("CreateBooking")]
         public async Task<IActionResult> Post(CreateBookingDto item)
         {
             try
-            { 
+            {
                 //auto mapper
                 Booking mapBooking = _mapper.Map<Booking>(item);
 
                 var response = await _dbContext.Bookings.AddAsync(mapBooking);
                 var response2 = await _dbContext.SaveChangesAsync();
-                if (response2 >  0)
+                if (response2 > 0)
                 {
                     return Ok(item);
                 }
@@ -112,7 +112,7 @@ namespace KrishBookingAPI.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("UpdateBookingBy{id}")]
         public async Task<IActionResult> Update(Guid id, UpdateBookingDto booking)
         {
             //auto mapper
@@ -141,18 +141,18 @@ namespace KrishBookingAPI.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteBookingBy{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            
+
             try
             {
-             
+
                 var bookingDelete = await _dbContext.Bookings
-                    .Include(c=>c.Payments)
+                    .Include(c => c.Payments)
                     .Where(c => c.Id == id)
                     .ToListAsync();
-                
+
 
                 if (bookingDelete != null)
                 {
@@ -174,19 +174,19 @@ namespace KrishBookingAPI.Controllers
                 }
                 return NotFound();
 
-               
+
 
             }
             catch (Exception e)
             {
-                throw e;                
+                throw e;
             }
         }
 
 
         private bool FacilityExists(Guid id)
         {
-            return _dbContext.Bookings.Any(e => e.FacilityId == id); 
+            return _dbContext.Bookings.Any(e => e.FacilityId == id);
         }
         private bool BookingExists(Guid id)
         {
@@ -194,4 +194,3 @@ namespace KrishBookingAPI.Controllers
         }
     }
 }
-
