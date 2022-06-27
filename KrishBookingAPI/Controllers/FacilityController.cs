@@ -62,6 +62,88 @@ namespace KrishBookingAPI.Controllers
             }
         }
 
+        [HttpGet("GetFacilityBy{id}")]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                var response = await _dbContext.Facilities
+                    .Where(c => c.Id == id)
+                    .ToListAsync();
+                return Ok(response);
+
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
+
+        [HttpPut("UpdateFacilityBy{id}")]
+        public async Task<IActionResult> Update(Guid id, UpdateFacilityDto facility)
+        {
+            //auto mapper
+            Facility mapBooking = _mapper.Map<Facility>(facility);
+
+
+            if (id != mapBooking.Id)
+                return BadRequest();
+
+            //_dbContext.Entry(mapBooking).Entity.AdditionalInfo = EntityState.Modified.;
+            _dbContext.Entry(mapBooking).State = EntityState.Modified;
+
+            try
+            {
+
+                var response = await _dbContext.SaveChangesAsync();
+                return Ok();
+
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+
+                if (!FacilityExists(id))
+                    return NotFound();
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("DeleteFacilityBy{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+
+            try
+            {
+
+                var facilityDelete = await _dbContext.Facilities
+                    .Include(c => c.Bookings)
+                    .Where(c => c.Id == id)
+                    .ToListAsync();
+
+                if (facilityDelete != null)
+                {
+                    _dbContext.Facilities.RemoveRange(facilityDelete);
+
+                    var response = await _dbContext.SaveChangesAsync();
+                    return Ok();
+                }
+                return NotFound();
+
+
+
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        private bool FacilityExists(Guid id)
+        {
+            return _dbContext.Facilities.Any(e => e.Id == id);
+        }
 
     }
 }

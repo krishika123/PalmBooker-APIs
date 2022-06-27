@@ -1,5 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AutoMapper;
+using KrishBookingAPI.Data;
+using KrishBookingAPI.Entities;
+using KrishBookingAPI.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace KrishBookingAPI.Entities
 {
