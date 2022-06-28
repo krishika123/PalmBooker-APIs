@@ -11,7 +11,7 @@ namespace KrishBookingAPI.Controllers
     [Route("api/[controller]")]
     [ApiController]
 
-    public class PaymentController
+    public class PaymentController : ControllerBase 
     {
         private readonly KRISHBOOKINGDBContext _dbContext;
         private readonly IMapper _mapper;
@@ -27,20 +27,17 @@ namespace KrishBookingAPI.Controllers
         {
             try
             {
-                var response = await _dbContext.Bookings.ToListAsync();
-                if (response != null)
-                {
-                    var bookings = _mapper.Map<List<BookingDetailsDto>>(response);
-                    return Ok(bookings);
-                }
-                return NoContent();
+                var response = await _dbContext.Payments.ToListAsync();
+                return Ok(response);
 
             }
-            catch (Exception e)
+            catch 
             {
-
-                throw e;
+                return NoContent();
             }
         }
+
+
+
     }
 }
