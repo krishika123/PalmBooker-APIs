@@ -2,6 +2,7 @@
 using KrishBookingAPI.Data;
 using KrishBookingAPI.Entities;
 using KrishBookingAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KrishBookingAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FacilityController : ControllerBase
