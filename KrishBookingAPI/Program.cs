@@ -14,7 +14,7 @@ builder.Services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", opt =>
    {
        opt.RequireHttpsMetadata = false;
-       opt.Authority = "https://psl-app-vm3/EBookkeepingAuth";
+       opt.Authority = "https://psl-webapps/EBookkeepingAuth";
        opt.Audience = "ebookkeeping-api";
    });
 builder.Services.AddControllers();
@@ -30,8 +30,8 @@ builder.Services.AddSwaggerGen(options =>
         {
             Implicit = new OpenApiOAuthFlow
             {
-                AuthorizationUrl = new Uri("https://psl-app-vm3/EBookkeepingAuth/connect/authorize"),
-                TokenUrl = new Uri("https://psl-app-vm3/EBookkeepingAuth/connect/token"),
+                AuthorizationUrl = new Uri("https://psl-webapps/EBookkeepingAuth/connect/authorize"),
+                TokenUrl = new Uri("https://psl-webapps/EBookkeepingAuth/connect/token"),
                 Scopes = new Dictionary<string, string>
             {
                 {"ebookkeeping-api", "PalmBooking API - full access"}
