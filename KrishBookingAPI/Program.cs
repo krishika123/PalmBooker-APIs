@@ -7,6 +7,16 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+    policy.WithOrigins(new string[] { "http://localhost:3001" })
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
 // Add services to the container.
 builder.Services.AddDbContext<KRISHBOOKINGDBContext>(options =>
     options.UseSqlServer(builder.Configuration["ConnectionStrings:PalmBookingDb"]));
@@ -62,7 +72,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("CorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace KrishBookingAPI.Controllers
 {
     [Authorize]
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
 
