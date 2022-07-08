@@ -44,10 +44,11 @@ namespace KrishBookingAPI.Controllers
             }
             catch (Exception e)
             {
-
                 throw e;
             }
         }
+        
+       
         [HttpGet("GetDeletedBookings")]
         public async Task<IActionResult> GetDeleted()
         {
