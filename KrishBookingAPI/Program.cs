@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -20,6 +21,8 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddDbContext<KRISHBOOKINGDBContext>(options =>
     options.UseSqlServer(builder.Configuration["ConnectionStrings:PalmBookingDb"]));
+
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", opt =>
    {

@@ -7,7 +7,7 @@
     [StatusAoD]      VARCHAR (255) NULL ,
     [AdditionalInfo] VARCHAR (255) NULL,
     PRIMARY KEY CLUSTERED ([ID] ASC), 
-    CONSTRAINT [FK_Bookings_To_Users] FOREIGN KEY ([UserID]) REFERENCES [Users]([ID]),
+    --CONSTRAINT [FK_Bookings_To_Users] FOREIGN KEY ([UserID]) REFERENCES [Users]([ID]),
     CONSTRAINT [FK_Bookings_To_Facility] FOREIGN KEY ([FacilityID]) REFERENCES [Facility]([ID])
 );
 
