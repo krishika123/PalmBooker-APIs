@@ -11,7 +11,7 @@ builder.Services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", opt =>
    {
        opt.RequireHttpsMetadata = false;
-       opt.Authority = "https://psl-app-vm3/EBookkeepingAuth";
+       opt.Authority = "http://psl-app-vm3/EBookkeepingAuth";
        opt.Audience = "ebookkeeping-api";
    });
 builder.Services.AddControllers();

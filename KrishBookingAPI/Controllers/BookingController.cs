@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KrishBookingAPI.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes ="Bearer")]
     [Route("api/[controller]")]
     [ApiController]
     public class BookingController : ControllerBase
