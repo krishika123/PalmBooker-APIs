@@ -167,6 +167,9 @@ namespace KrishBookingAPI.Data
                 entity.Property(e => e.PhoneNumber)
                     .HasMaxLength(255)
                     .IsUnicode(false);
+                entity.Property(e => e.Password)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);
