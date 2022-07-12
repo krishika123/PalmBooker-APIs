@@ -19,10 +19,8 @@ namespace KrishBookingAPI.Profiles
                 .ReverseMap();
             ;
             CreateMap<BookingDetailsDto, Booking>()
-                .ForMember(
-                    dest => dest.Payments,
-                    opt => opt.MapFrom(src => src.Payments)
-                )
+                .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments) )
+                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User) )
                 
                 //.ForMember(
                 //    dest => dest.User.Name,
@@ -42,17 +40,24 @@ namespace KrishBookingAPI.Profiles
                 //)
                 .ReverseMap();
             ;
-            CreateMap<CreatePaymentDto, Payment>()
-                .ForMember(
-                    dest => dest.Name,
-                    opt => opt.MapFrom(src =>  src.MethodOfPayment)
-                ).ReverseMap();
-            ;
+            //CreateMap<CreatePaymentDto, Payment>()
+            //    .ForMember(
+            //        dest => dest.Name,
+            //        opt => opt.MapFrom(src =>  src.MethodOfPayment)
+            //    ).ReverseMap();
+            //;
             CreateMap<PaymentDto, Payment>()
                 .ForMember(
                     dest => dest.Name,
                     opt => opt.MapFrom(src =>  src.MethodOfPayment)
                 ).ReverseMap();
+            ;
+
+            CreateMap<UserDto, User>()
+                //.ForMember(dest => dest.Name, opt => opt.MapFrom(src =>  src.Name))
+                //.ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src =>  src.PhoneNumber))
+                //.ForMember(dest => dest.Email, opt => opt.MapFrom(src =>  src.Email))
+                .ReverseMap();
             ;
 
         }

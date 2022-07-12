@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace KrishBookingAPI.Controllers
 {
     [Authorize]
-    [AllowAnonymous]
+    
     [Route("api/[controller]")]
     [ApiController]
     public class BookingController : ControllerBase
@@ -24,6 +24,7 @@ namespace KrishBookingAPI.Controllers
             _mapper = mapper;
         }
 
+        [AllowAnonymous]
         [HttpGet("GetBookings")]
         public async Task<IActionResult> Get()
         {
@@ -47,8 +48,8 @@ namespace KrishBookingAPI.Controllers
                 throw e;
             }
         }
-        
-       
+
+        [AllowAnonymous]
         [HttpGet("GetDeletedBookings")]
         public async Task<IActionResult> GetDeleted()
         {
@@ -73,6 +74,8 @@ namespace KrishBookingAPI.Controllers
                 throw e;
             }
         }
+
+        [AllowAnonymous]
         [HttpGet("GetBookingBy{id}")]
         public async Task<IActionResult> Get(Guid id)
         {
@@ -80,8 +83,15 @@ namespace KrishBookingAPI.Controllers
             {
                 var response = await _dbContext.Bookings
                     .Where(c => c.Id == id && c.StatusAoD != "DEL")
+                    .Include(c => c.User)
+                    .Include(c => c.Facility)
                     .ToListAsync();
-                return Ok(response);
+                if(response != null)
+                {
+                    var bookings = _mapper.Map<List<BookingDetailsDto>>(response);
+                    return Ok(bookings);
+                }
+                return NoContent();
 
             }
             catch (Exception e)
@@ -91,23 +101,26 @@ namespace KrishBookingAPI.Controllers
             }
         }
 
+        //[Authorize]
         [HttpPost("CreateBooking")]
         public async Task<IActionResult> Post(CreateBookingDto item)
         {
             try
             {
-                //auto mapper
+
                 Booking mapBooking = _mapper.Map<Booking>(item);
 
-                var response = await _dbContext.Bookings.AddAsync(mapBooking);
-                var response2 = await _dbContext.SaveChangesAsync();
-                if (response2 > 0)
+                //var userid = HttpContext.User.Claims.Where(c=>c.Type=="sub").FirstOrDefault().Value;
+                mapBooking.UserId = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+                var response2 = await _dbContext.Bookings.AddAsync(mapBooking);
+                var response3 = await _dbContext.SaveChangesAsync();
+                if (response3 > 0)
                 {
                     return Ok(item);
                 }
                 return BadRequest();
-
-            }
+                }
+            
             catch (Exception e)
             {
 
@@ -115,9 +128,9 @@ namespace KrishBookingAPI.Controllers
             }
         }
 
-
+        [AllowAnonymous]
         [HttpPut("UpdateBookingBy{id}")]
-        public async Task<IActionResult> Update(Guid id, UpdateBookingDto booking)
+        public async Task<IActionResult> Update(Guid id, BookingDetailsDto booking)
         {
             //auto mapper
             Booking mapBooking = _mapper.Map<Booking>(booking);
@@ -145,6 +158,7 @@ namespace KrishBookingAPI.Controllers
             return NoContent();
         }
 
+        [AllowAnonymous]
         [HttpDelete("DeleteBookingBy{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
