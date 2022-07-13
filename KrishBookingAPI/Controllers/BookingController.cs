@@ -113,6 +113,7 @@ namespace KrishBookingAPI.Controllers
 
                 //var userid = HttpContext.User.Claims.Where(c=>c.Type=="sub").FirstOrDefault().Value;
                 mapBooking.UserId = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+                mapBooking.StatusAoD = "ACT";
                 //mapBooking.UserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var response2 = await _dbContext.Bookings.AddAsync(mapBooking);
                 var response3 = await _dbContext.SaveChangesAsync();
