@@ -52,11 +52,10 @@ namespace KrishBookingAPI.Profiles
                     opt => opt.MapFrom(src =>  src.MethodOfPayment)
                 ).ReverseMap();
             ;
-
-            CreateMap<UserDto, User>()
-                //.ForMember(dest => dest.Name, opt => opt.MapFrom(src =>  src.Name))
-                //.ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src =>  src.PhoneNumber))
-                //.ForMember(dest => dest.Email, opt => opt.MapFrom(src =>  src.Email))
+            CreateMap<AspNetUser, UserDto>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>  src.AspNetUserClaims.FirstOrDefault(c=>c.ClaimType=="name").ClaimValue))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src =>  src.AspNetUserClaims.FirstOrDefault(c=>c.ClaimType=="email").ClaimValue))
+                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src =>  src.AspNetUserClaims.FirstOrDefault(c=>c.ClaimType=="phone").ClaimValue))
                 .ReverseMap();
             ;
 

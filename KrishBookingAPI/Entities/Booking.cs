@@ -11,7 +11,7 @@ namespace KrishBookingAPI.Entities
         }
 
         public Guid Id { get; set; }
-        public Guid? UserId { get; set; }
+        public string? UserId { get; set; }
         public Guid? FacilityId { get; set; }
         public string? EventDate { get; set; }
         public string? EventTime { get; set; }
@@ -19,7 +19,7 @@ namespace KrishBookingAPI.Entities
         public string? AdditionalInfo { get; set; }
 
         public virtual Facility? Facility { get; set; }
-        public virtual User? User { get; set; }
+        public virtual AspNetUser? User { get; set; }
         public virtual ICollection<Payment> Payments { get; set; }
     }
 }

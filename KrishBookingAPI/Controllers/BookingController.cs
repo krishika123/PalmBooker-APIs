@@ -33,7 +33,7 @@ namespace KrishBookingAPI.Controllers
             {
                 var response = await _dbContext.Bookings
                     .Where(c => c.StatusAoD != "DEL")
-                    .Include(c => c.User)
+                    .Include(c => c.User).ThenInclude(c=>c.AspNetUserClaims)
                     .Include(c => c.Facility)
                     .ToListAsync();
                 if (response != null)
@@ -112,7 +112,7 @@ namespace KrishBookingAPI.Controllers
                 Booking mapBooking = _mapper.Map<Booking>(item);
 
                 //var userid = HttpContext.User.Claims.Where(c=>c.Type=="sub").FirstOrDefault().Value;
-                mapBooking.UserId = Guid.Parse(User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value);
+                mapBooking.UserId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
                 //mapBooking.UserId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
                 var response2 = await _dbContext.Bookings.AddAsync(mapBooking);
                 var response3 = await _dbContext.SaveChangesAsync();

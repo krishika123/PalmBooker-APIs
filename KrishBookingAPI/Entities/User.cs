@@ -7,7 +7,6 @@ namespace KrishBookingAPI.Entities
     {
         public User()
         {
-            Bookings = new HashSet<Booking>();
             Contacts = new HashSet<Contact>();
         }
 
@@ -17,7 +16,6 @@ namespace KrishBookingAPI.Entities
         public string PhoneNumber { get; set; } = null!;
         public string Password { get; set; } = null!;
 
-        public virtual ICollection<Booking> Bookings { get; set; }
         public virtual ICollection<Contact> Contacts { get; set; }
     }
 }
