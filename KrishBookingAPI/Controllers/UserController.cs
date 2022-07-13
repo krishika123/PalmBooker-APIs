@@ -30,9 +30,9 @@ namespace KrishBookingAPI.Controllers
         {
             try
             {
-                var response = await _dbContext.Users
+                var response = await _dbContext.AspNetUsers
                     .Include(c => c.Bookings)
-                    .Include(c => c.Contacts)
+                    //.Include(c => c.Contacts)
                     .ToListAsync();
                 if (response != null)
                 {
