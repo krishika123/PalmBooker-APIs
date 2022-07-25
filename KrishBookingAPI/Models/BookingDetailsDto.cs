@@ -12,6 +12,15 @@
         public List<PaymentDto> Payments { get; set; }
 
     }
+    public class BookingUpdateDto
+    {
+        public Guid Id { get; set; }
+        public Guid FacilityId { get; set; }
+        public string? EventDate { get; set; }
+        public string? EventTime { get; set; }
+        public string? AdditionalInfo { get; set; }
+
+    }
 
     public class UserDto
     {

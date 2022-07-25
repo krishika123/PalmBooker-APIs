@@ -10,8 +10,7 @@ using System.Security.Claims;
 
 namespace KrishBookingAPI.Controllers
 {
-    [Authorize]
-    
+    [Authorize]    
     [Route("api/[controller]")]
     [ApiController]
     public class BookingController : ControllerBase
@@ -132,11 +131,10 @@ namespace KrishBookingAPI.Controllers
 
         [AllowAnonymous]
         [HttpPut("UpdateBookingBy{id}")]
-        public async Task<IActionResult> Update(Guid id, BookingDetailsDto booking)
+        public async Task<IActionResult> Update(Guid id, UpdateBookingDto booking)
         {
             //auto mapper
             Booking mapBooking = _mapper.Map<Booking>(booking);
-
 
             if (id != mapBooking.Id)
                 return BadRequest();
@@ -148,7 +146,11 @@ namespace KrishBookingAPI.Controllers
             {
 
                 var response = await _dbContext.SaveChangesAsync();
-                return Ok();
+                if (response > 0)
+                {
+                    return Ok();
+                }
+                throw new Exception("Booking cannot be modified now. Try Again later.");
 
             }
             catch (DbUpdateConcurrencyException)
