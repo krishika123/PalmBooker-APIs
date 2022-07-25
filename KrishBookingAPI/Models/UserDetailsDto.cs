@@ -5,8 +5,8 @@
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Password { get; set; }
+        //public string PhoneNumber { get; set; }
+        //public string Password { get; set; }
         public List<BookingDto> Bookings { get; set; }
         public List<ContactDto> Contacts { get; set; }
 

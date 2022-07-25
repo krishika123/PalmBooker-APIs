@@ -32,6 +32,7 @@ namespace KrishBookingAPI.Controllers
             {
                 var response = await _dbContext.AspNetUsers
                     .Include(c => c.Bookings)
+                    .Include(c => c.AspNetUserClaims)
                     //.Include(c => c.Contacts)
                     .ToListAsync();
                 if (response != null)
@@ -54,8 +55,10 @@ namespace KrishBookingAPI.Controllers
         {
             try
             {
-                var response = await _dbContext.Users
-                    .Where(c => c.Id == id)
+                var response = await _dbContext.AspNetUsers
+                                        .Include(c => c.AspNetUserClaims)
+
+                    .Where(c => c.Id == id.ToString())
                     .ToListAsync();
                 return Ok(response);
 
@@ -67,100 +70,100 @@ namespace KrishBookingAPI.Controllers
             }
         }
 
-        [HttpPost("CreateUser")]
-        public async Task<IActionResult> Post(CreateUserDto item)
-        {
-            try
-            {
-                //auto mapper
-               User mapUser = _mapper.Map<User>(item);
+        //[HttpPost("CreateUser")]
+        //public async Task<IActionResult> Post(CreateUserDto item)
+        //{
+        //    try
+        //    {
+        //        //auto mapper
+        //       User mapUser = _mapper.Map<User>(item);
 
-                var response = await _dbContext.Users.AddAsync(mapUser);
-                var response2 = await _dbContext.SaveChangesAsync();
-                if (response2 > 0)
-                {
-                    return Ok(item);
-                }
-                return BadRequest();
+        //        var response = await _dbContext.Users.AddAsync(mapUser);
+        //        var response2 = await _dbContext.SaveChangesAsync();
+        //        if (response2 > 0)
+        //        {
+        //            return Ok(item);
+        //        }
+        //        return BadRequest();
 
-            }
-            catch (Exception e)
-            {
+        //    }
+        //    catch (Exception e)
+        //    {
 
-               throw e;
-           }
-        }
+        //       throw e;
+        //   }
+        //}
 
-        [HttpDelete("DeleteUserBy{id}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
+        //[HttpDelete("DeleteUserBy{id}")]
+        //public async Task<IActionResult> Delete(Guid id)
+        //{
 
-            try
-            {
+        //    try
+        //    {
 
-                var userDelete = await _dbContext.Users
-                    .Where(c => c.Id == id)
-                    .ToListAsync();
-
-
-                if (userDelete != null)
-                {
-
-                    //Hard Delete
-                    _dbContext.Users.RemoveRange(userDelete);
+        //        var userDelete = await _dbContext.Users
+        //            .Where(c => c.Id == id)
+        //            .ToListAsync();
 
 
-                    ////Soft Delete
-                    //foreach (var item in userDelete)
-                    //{
-                    //    item.StatusAoD = "DEL";
-                    //}
-                    //_dbContext.Bookings.UpdateRange(userDelete);
-                    ////
+        //        if (userDelete != null)
+        //        {
 
-                    var response = await _dbContext.SaveChangesAsync();
-                    return Ok();
-                }
-                return NotFound();
+        //            //Hard Delete
+        //            _dbContext.Users.RemoveRange(userDelete);
 
 
+        //            ////Soft Delete
+        //            //foreach (var item in userDelete)
+        //            //{
+        //            //    item.StatusAoD = "DEL";
+        //            //}
+        //            //_dbContext.Bookings.UpdateRange(userDelete);
+        //            ////
 
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
-
-        [HttpPut("UpdateUserBy{id}")]
-        public async Task<IActionResult> Update(Guid id, UpdateUserDto user)
-        {
-            //auto mapper
-            User mapUser = _mapper.Map<User>(user);
+        //            var response = await _dbContext.SaveChangesAsync();
+        //            return Ok();
+        //        }
+        //        return NotFound();
 
 
-            if (id != mapUser.Id)
-                return BadRequest();
 
-            //_dbContext.Entry(mapBooking).Entity.AdditionalInfo = EntityState.Modified.;
-            _dbContext.Entry(mapUser).State = EntityState.Modified;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw e;
+        //    }
+        //}
 
-            try
-            {
 
-                var response = await _dbContext.SaveChangesAsync();
-                return Ok();
+        //[HttpPut("UpdateUserBy{id}")]
+        //public async Task<IActionResult> Update(Guid id, UpdateUserDto user)
+        //{
+        //    //auto mapper
+        //    User mapUser = _mapper.Map<User>(user);
 
-            }
-            catch (DbUpdateConcurrencyException)
-            {
 
-                if (!UserExists(id))
-                    return NotFound();
-            }
-            return NoContent();
-        }
+        //    if (id != mapUser.Id)
+        //        return BadRequest();
+
+        //    //_dbContext.Entry(mapBooking).Entity.AdditionalInfo = EntityState.Modified.;
+        //    _dbContext.Entry(mapUser).State = EntityState.Modified;
+
+        //    try
+        //    {
+
+        //        var response = await _dbContext.SaveChangesAsync();
+        //        return Ok();
+
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+
+        //        if (!UserExists(id))
+        //            return NotFound();
+        //    }
+        //    return NoContent();
+        //}
 
 
         private bool UserExists(Guid id)

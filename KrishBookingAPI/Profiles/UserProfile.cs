@@ -8,22 +8,23 @@ namespace KrishBookingAPI.Profiles
     {
         public UserProfile()
         {
-            CreateMap<UpdateUserDto, User>()
-                .ForMember(
-                    dest => dest.Password,
-                    opt => opt.MapFrom(src => $"{src.Password}")
-                )
+            CreateMap<UpdateUserDto, AspNetUser>()
+                //.ForMember(
+                //    dest => dest.Password,
+                //    opt => opt.MapFrom(src => $"{src.Password}")
+                //)
                 ;
 
-            CreateMap<CreateUserDto, User>()
+            CreateMap<CreateUserDto, AspNetUser>()
                 .ReverseMap();
                 ;
 
-            CreateMap<UserDetailsDto, User>()
-                .ForMember(
-                    dest => dest.Contacts,
-                    opt => opt.MapFrom(src => src.Contacts)
-                ).ReverseMap();
+            CreateMap<AspNetUser, UserDetailsDto>()
+                .ForMember(src => src.Name, dst => dst.MapFrom(d => d.AspNetUserClaims.Where(x => x.ClaimType == "name").FirstOrDefault().ClaimValue))
+                .ForMember(src => src.Email, dst => dst.MapFrom(d => d.AspNetUserClaims.Where(x => x.ClaimType == "email").FirstOrDefault().ClaimValue))
+                //.ForMember(dest => dest.AspNetUserClaims.Where(x=>x.ClaimType=="name").FirstOrDefault().ClaimValue, opt => opt.MapFrom(src => src.Name))
+                //.ForMember(dest => dest.AspNetUserClaims.Where(x => x.ClaimType == "email").FirstOrDefault().ClaimValue, opt => opt.MapFrom(src => src.Email))
+                .ReverseMap();
                 ;
 
             CreateMap<BookingDto, Booking>()

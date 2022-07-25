@@ -18,8 +18,9 @@ namespace KrishBookingAPI.Profiles
                 
                 .ReverseMap();
             ;
-            CreateMap<BookingDetailsDto, Booking>()
+            CreateMap<Booking, BookingDetailsDto>()
                 .ForMember(dest => dest.Payments, opt => opt.MapFrom(src => src.Payments) )
+                .ForMember(dest => dest.FacilityDesc, opt => opt.MapFrom(src => src.Facility.Description) )
                 .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User) )
                 
                 //.ForMember(
