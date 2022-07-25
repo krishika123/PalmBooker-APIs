@@ -12,7 +12,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-    policy.WithOrigins(new string[] { "http://localhost:3000" })
+    policy.WithOrigins(new string[] { "http://localhost:3000", "https://krishika.com" })
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
@@ -26,9 +26,9 @@ JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 builder.Services.AddAuthentication("Bearer")
    .AddJwtBearer("Bearer", opt =>
    {
-       opt.RequireHttpsMetadata = false;
-       opt.Authority = "https://psl-webapps/PalmBookingAuth";
-       opt.Audience = "ebookkeeping-api";
+       opt.RequireHttpsMetadata = true;
+       opt.Authority = builder.Configuration["AuthSettings:Authority"];
+       opt.Audience = builder.Configuration["AuthSettings:Audience"];
    });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -43,11 +43,11 @@ builder.Services.AddSwaggerGen(options =>
         {
             Implicit = new OpenApiOAuthFlow
             {
-                AuthorizationUrl = new Uri("https://psl-webapps/PalmBookingAuth/connect/authorize"),
-                TokenUrl = new Uri("https://psl-webapps/PalmBookingAuth/connect/token"),
+                AuthorizationUrl = new Uri(builder.Configuration["AuthSettings:AuthorizationUrl"]),
+                TokenUrl = new Uri(builder.Configuration["AuthSettings:TokenUrl"]),
                 Scopes = new Dictionary<string, string>
             {
-                {"ebookkeeping-api", "PalmBooking API - full access"}
+                {builder.Configuration["AuthSettings:Audience"], "PalmBooking API - full access"}
             }
             }
         }
@@ -60,20 +60,29 @@ builder.Services.AddSwaggerGen(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI(options =>
+//    {
+//        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+
+//        options.OAuthClientId("api-swagger");
+//        options.OAuthClientSecret("secret");
+//        options.OAuthAppName("PalmBooking API - Swagger");
+//        //options.OAuthUsePkce();
+//    });
+//}
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
-    {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 
-        options.OAuthClientId("api-swagger");
-        options.OAuthClientSecret("secret");
-        options.OAuthAppName("PalmBooking API - Swagger");
-        //options.OAuthUsePkce();
-    });
-}
-
+    options.OAuthClientId(builder.Configuration["AuthSettings:ClientId"]);
+    options.OAuthClientSecret(builder.Configuration["AuthSettings:ClientSecret"]);
+    options.OAuthAppName("PalmBooking API - Swagger");
+    //options.OAuthUsePkce();
+});
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
 app.UseAuthentication();

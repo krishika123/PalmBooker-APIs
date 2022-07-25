@@ -55,7 +55,6 @@ namespace KrishBookingAPI.Profiles
             CreateMap<AspNetUser, UserDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>  src.AspNetUserClaims.FirstOrDefault(c=>c.ClaimType=="name").ClaimValue))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src =>  src.AspNetUserClaims.FirstOrDefault(c=>c.ClaimType=="email").ClaimValue))
-                .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src =>  src.AspNetUserClaims.FirstOrDefault(c=>c.ClaimType=="phone").ClaimValue))
                 .ReverseMap();
             ;
 

@@ -2,9 +2,20 @@
 {
     public class CreateContactDto
     {
-        public Guid? UserId { get; set; }
+        //public Guid? UserId { get;  set; }
+        public ContactUserDto User { get; set; }
         public string? ReasonOfContact { get; set; }
         public string? Message { get; set; }
 
     }
+
+    public class ContactUserDto
+    {
+
+        public string Name { get; set; }
+        public string Email { get; set; }
+
+    }
+
+
 }
