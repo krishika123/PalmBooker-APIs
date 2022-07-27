@@ -10,12 +10,13 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", policy =>
+    options.AddPolicy("AllowOrigin", policy =>
     {
     policy.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod()
-            .AllowCredentials();
+            //.AllowCredentials()
+            ;
     });
 });
 
@@ -87,7 +88,7 @@ app.UseSwaggerUI(options =>
     //options.OAuthUsePkce();
 });
 app.UseHttpsRedirection();
-app.UseCors("CorsPolicy");
+//app.UseCors("CorsPolicy");
 app.UseCors("AllowOrigin");
 app.UseAuthentication();
 app.UseAuthorization();

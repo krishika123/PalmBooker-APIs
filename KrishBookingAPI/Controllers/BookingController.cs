@@ -101,30 +101,30 @@ namespace KrishBookingAPI.Controllers
             }
         }
 
-        //[AllowAnonymous]
-        //[HttpDelete("GetBookingByUser{id}")]
-        //public async Task<IActionResult> Get()
-        //{
-        //    try
-        //    {
-        //        var response = await _dbContext.Bookings
-        //            .Where(c => c.Id == id && c.StatusAoD != "DEL")
-        //            .Include(c => c.User)
-        //            .ToListAsync();
-        //        if (response != null)
-        //        {
-        //            var bookings = _mapper.Map<List<BookingDetailsDto>>(response);
-        //            return Ok(bookings);
-        //        }
-        //        return NoContent();
+        [AllowAnonymous]
+        [HttpGet("GetBookingsByEmail{email}")]
+        public async Task<IActionResult> GetBookingsByEmail(string email)
+        {
+            try
+            {
+                var response = await _dbContext.Bookings
+                    .Where(c => c.User.Email == email && c.StatusAoD != "DEL")
+                    .Include(c => c.User)
+                    .ToListAsync();
+                if (response != null)
+                {
+                    var bookings = _mapper.Map<List<BookingDetailsDto>>(response);
+                    return Ok(bookings);
+                }
+                return NoContent();
 
-        //    }
-        //    catch (Exception e)
-        //    {
+            }
+            catch (Exception e)
+            {
 
-        //        throw e;
-        //    }
-        //}
+                throw e;
+            }
+        }
 
         //[Authorize]
         [HttpPost("CreateBooking")]
