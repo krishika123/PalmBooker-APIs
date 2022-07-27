@@ -101,6 +101,31 @@ namespace KrishBookingAPI.Controllers
             }
         }
 
+        //[AllowAnonymous]
+        //[HttpDelete("GetBookingByUser{id}")]
+        //public async Task<IActionResult> Get()
+        //{
+        //    try
+        //    {
+        //        var response = await _dbContext.Bookings
+        //            .Where(c => c.Id == id && c.StatusAoD != "DEL")
+        //            .Include(c => c.User)
+        //            .ToListAsync();
+        //        if (response != null)
+        //        {
+        //            var bookings = _mapper.Map<List<BookingDetailsDto>>(response);
+        //            return Ok(bookings);
+        //        }
+        //        return NoContent();
+
+        //    }
+        //    catch (Exception e)
+        //    {
+
+        //        throw e;
+        //    }
+        //}
+
         //[Authorize]
         [HttpPost("CreateBooking")]
         public async Task<IActionResult> Post(CreateBookingDto item)
@@ -144,7 +169,6 @@ namespace KrishBookingAPI.Controllers
 
             try
             {
-
                 var response = await _dbContext.SaveChangesAsync();
                 if (response > 0)
                 {
@@ -210,6 +234,10 @@ namespace KrishBookingAPI.Controllers
         {
             return _dbContext.Bookings.Any(e => e.FacilityId == id);
         }
+        //private bool UserFilter(BookingDetailsDto user)
+        //{
+        //    return _dbContext.Bookings.Any(e => e.UserId == id);
+        //}
         private bool BookingExists(Guid id)
         {
             return _dbContext.Bookings.Any(e => e.Id == id);

@@ -12,12 +12,15 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-    policy.WithOrigins(new string[] { "http://localhost:3000", "https://krishika.com" })
+    policy.AllowAnyOrigin()
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();
     });
 });
+
+
+
 // Add services to the container.
 builder.Services.AddDbContext<KRISHBOOKINGDBContext>(options =>
     options.UseSqlServer(builder.Configuration["ConnectionStrings:PalmBookingDb"]));
@@ -85,6 +88,7 @@ app.UseSwaggerUI(options =>
 });
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy");
+app.UseCors("AllowOrigin");
 app.UseAuthentication();
 app.UseAuthorization();
 
