@@ -10,8 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace KrishBookingAPI.Controllers
 {
-    [Authorize]
-    
+    [Authorize]    
     [Route("api/[controller]")]
     [ApiController]
     public class FacilityController : ControllerBase
@@ -32,8 +31,6 @@ namespace KrishBookingAPI.Controllers
             {
                 var response = await _dbContext.Facilities.ToListAsync();
                 return Ok(response);
-                
-                
             }
             catch 
             {

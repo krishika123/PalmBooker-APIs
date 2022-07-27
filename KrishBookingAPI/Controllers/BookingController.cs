@@ -106,10 +106,39 @@ namespace KrishBookingAPI.Controllers
         public async Task<IActionResult> GetBookingsByEmail(string email)
         {
             try
+            {                
+
+                var response = await _dbContext.Bookings                    
+                    .Include(c => c.User).ThenInclude(c => c.AspNetUserClaims)
+                    .Include(c => c.Facility)
+                    .Where(c => c.User.AspNetUserClaims.FirstOrDefault(c => c.ClaimType == "email").ClaimValue == email && c.StatusAoD != "DEL")
+                    .ToListAsync();
+                if (response != null)
+                {
+                    var bookings = _mapper.Map<List<BookingDetailsDto>>(response);
+                    return Ok(bookings);
+                }
+                return NoContent();
+
+            }
+            catch (Exception e)
             {
-                var response = await _dbContext.Bookings
-                    .Where(c => c.User.Email == email && c.StatusAoD != "DEL")
-                    .Include(c => c.User)
+
+                throw e;
+            }
+        } 
+
+        [Authorize]
+        [HttpGet("GetUserBookings")]
+        public async Task<IActionResult> GetUserBookings()
+        {
+            try
+            {
+                var userId = User.Claims.FirstOrDefault(c => c.Type == "sub")?.Value;
+                var response = await _dbContext.Bookings                    
+                    .Include(c => c.User).ThenInclude(c => c.AspNetUserClaims)
+                    .Include(c => c.Facility)
+                    .Where(c => c.UserId == userId && c.StatusAoD != "DEL")
                     .ToListAsync();
                 if (response != null)
                 {
