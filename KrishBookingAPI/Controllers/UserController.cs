@@ -58,9 +58,8 @@ namespace KrishBookingAPI.Controllers
                 var response = await _dbContext.AspNetUsers
                                         .Include(c => c.AspNetUserClaims)
 
-                    .Where(c => c.Id == id.ToString())
-                    .ToListAsync();
-                return Ok(response);
+                    .FirstOrDefaultAsync(c => c.Id == id.ToString());
+                return Ok(_mapper.Map<UserDetailsDto>(response));
 
             }
             catch (Exception e)

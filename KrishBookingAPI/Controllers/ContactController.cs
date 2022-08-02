@@ -25,22 +25,26 @@ namespace KrishBookingAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("GetContacts")]
+        [HttpGet]
         public async Task<IActionResult> Get()
         {
             try
             {
                 var response = await _dbContext.Contacts.ToListAsync();
-                return Ok(response);
-
+                if (response != null)
+                {
+                    return Ok(response);
+                }
+                
+                return NoContent();
             }
-            catch
+            catch(Exception e)
             {
                 return NoContent();
             }
         }
 
-        [HttpPost("CreateContact")]
+        [HttpPost]
         public async Task<IActionResult> Post(CreateContactDto item)
         {
             try
@@ -52,7 +56,7 @@ namespace KrishBookingAPI.Controllers
                 var response2 = await _dbContext.SaveChangesAsync();
                 if (response2 > 0)
                 {
-                    return Ok(item);
+                    return CreatedAtAction("Get",new {id=response.Entity.Id }, _mapper.Map<ContactDetailsDto>(response.Entity));
                 }
                 return BadRequest();
 

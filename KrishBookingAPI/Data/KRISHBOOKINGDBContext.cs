@@ -55,7 +55,7 @@ namespace KrishBookingAPI.Data
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=PSL-DBSERVER-VM3\\Development2017;Database=KRISHBOOKINGDB;User Id=sa;Password=Persol@123;Trusted_Connection=False;TrustServerCertificate=True;");
+                optionsBuilder.UseSqlServer("Server=psl-dbserver-vm3\\development2017;Database=KRISHBOOKINGDB;User ID=sa;Password=Persol@123;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True");
             }
         }
 
@@ -406,20 +406,21 @@ namespace KrishBookingAPI.Data
                     .HasColumnName("ID")
                     .HasDefaultValueSql("(newid())");
 
+                entity.Property(e => e.Email)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.Message)
+                    .HasMaxLength(255)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.Name)
                     .HasMaxLength(255)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ReasonOfContact)
                     .HasMaxLength(255)
                     .IsUnicode(false);
-
-                entity.Property(e => e.UserId).HasColumnName("UserID");
-
-                entity.HasOne(d => d.User)
-                    .WithMany(p => p.Contacts)
-                    .HasForeignKey(d => d.UserId)
-                    .HasConstraintName("FK_Contacts_To_Users");
             });
 
             modelBuilder.Entity<DeviceCode>(entity =>

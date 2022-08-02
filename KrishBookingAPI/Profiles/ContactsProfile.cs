@@ -9,7 +9,11 @@ namespace KrishBookingAPI.Profiles
         public ContactsProfile()
         {
             CreateMap<CreateContactDto, Contact>()
-                .ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+                //.ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
+                .ReverseMap()
+                ;
+            CreateMap<ContactDetailsDto, Contact>()
+                //.ForMember(dest => dest.User, opt => opt.MapFrom(src => src.User))
                 .ReverseMap()
                 ;
 
@@ -17,6 +21,7 @@ namespace KrishBookingAPI.Profiles
             CreateMap<AspNetUser, ContactUserDto>()
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.AspNetUserClaims.FirstOrDefault(c => c.ClaimType == "name").ClaimValue))
                 .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.AspNetUserClaims.FirstOrDefault(c => c.ClaimType == "email").ClaimValue))
+                .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.Id))
                 .ReverseMap();
             ;
         }
